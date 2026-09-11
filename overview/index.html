@@ -1,0 +1,360 @@
+<title>Gym Management System</title>
+<meta name="robots" content="noindex, nofollow, noarchive, noai, noimageai">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    --bg: #F4F7F7;
+    --surface: #FFFFFF;
+    --surface-2: #EAF0F0;
+    --ink: #142020;
+    --ink-2: #3E5250;
+    --muted: #6B807D;
+    --line: #D7E0DF;
+    --accent: #0B8C7A;
+    --accent-ink: #086657;
+    --accent-soft: #D6F3EE;
+    --accent2: #5A49D8;
+    --accent2-soft: #E6E2FA;
+    --good: #1F8A55;
+    --good-soft: #DDF3E6;
+    --warn: #A8690E;
+    --warn-soft: #FBEBD0;
+    --bad: #C13B33;
+    --bad-soft: #FADDDB;
+    --shadow: 0 1px 2px rgba(20,32,32,.06), 0 8px 24px rgba(20,32,32,.06);
+    --radius: 10px;
+    --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+    --sans: "IBM Plex Sans Arabic", "Noto Sans Arabic", "Segoe UI", Tahoma, sans-serif;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0E1415;
+      --surface: #151C1E;
+      --surface-2: #1C2528;
+      --ink: #E6EDEC;
+      --ink-2: #B7C6C3;
+      --muted: #849693;
+      --line: #263134;
+      --accent: #2FE0C4;
+      --accent-ink: #7BEFDB;
+      --accent-soft: #123A36;
+      --accent2: #A99BFF;
+      --accent2-soft: #26224A;
+      --good: #4FCB86;
+      --good-soft: #163526;
+      --warn: #E5B25A;
+      --warn-soft: #3B2D12;
+      --bad: #F0776F;
+      --bad-soft: #43201E;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 10px 30px rgba(0,0,0,.35);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0E1415;
+    --surface: #151C1E;
+    --surface-2: #1C2528;
+    --ink: #E6EDEC;
+    --ink-2: #B7C6C3;
+    --muted: #849693;
+    --line: #263134;
+    --accent: #2FE0C4;
+    --accent-ink: #7BEFDB;
+    --accent-soft: #123A36;
+    --accent2: #A99BFF;
+    --accent2-soft: #26224A;
+    --good: #4FCB86;
+    --good-soft: #163526;
+    --warn: #E5B25A;
+    --warn-soft: #3B2D12;
+    --bad: #F0776F;
+    --bad-soft: #43201E;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 10px 30px rgba(0,0,0,.35);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  html { direction: rtl; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: var(--sans); font-size: 16px; line-height: 1.75;
+    letter-spacing: normal; -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent-ink); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .ltr { display: inline-block; direction: ltr; unicode-bidi: isolate; }
+  code, kbd, .mono { font-family: var(--mono); font-size: .9em; direction: ltr; unicode-bidi: isolate; }
+  code { background: var(--surface-2); padding: .1em .4em; border-radius: 5px; color: var(--ink); }
+  kbd { background: var(--surface-2); border: 1px solid var(--line); border-bottom-width: 2px; padding: .05em .45em; border-radius: 5px; }
+  h1, h2, h3, h4 { line-height: 1.3; letter-spacing: normal; text-wrap: balance; margin: 0; font-weight: 700; }
+  h1 { font-size: clamp(30px, 4vw, 44px); }
+  h2 { font-size: 28px; margin-block: 8px 6px; }
+  h3 { font-size: 21px; margin-block: 28px 8px; }
+  h4 { font-size: 17px; margin-block: 18px 6px; color: var(--ink-2); }
+  p { margin: 0 0 12px; max-width: 72ch; }
+  ul, ol { margin: 0 0 14px; padding-inline-start: 22px; max-width: 72ch; }
+  li { margin-bottom: 4px; }
+  li::marker { color: var(--accent); }
+  strong { font-weight: 600; }
+  .num { font-variant-numeric: tabular-nums; }
+
+  /* ---------- layout ---------- */
+  .page { max-width: 1240px; margin: 0 auto; padding: 0 24px 80px; }
+  .layout { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 40px; align-items: start; }
+  @media (max-width: 1080px) { .layout { grid-template-columns: 1fr; } .toc { position: static; } }
+  .toc { position: sticky; top: 16px; max-height: calc(100vh - 32px); overflow-y: auto; padding: 14px 0; font-size: 14px; }
+  .toc .eyebrow { margin-bottom: 8px; }
+  .toc a { display: block; padding: 5px 10px; border-inline-start: 2px solid var(--line); color: var(--ink-2); }
+  .toc a.l2 { padding-inline-start: 22px; font-size: 13px; color: var(--muted); }
+  .toc a:hover { border-color: var(--accent); color: var(--ink); text-decoration: none; }
+  section { margin-bottom: 64px; scroll-margin-top: 20px; }
+  .eyebrow { font-size: 12px; font-weight: 600; letter-spacing: normal; color: var(--accent-ink); text-transform: none; margin-bottom: 4px; }
+  .lead { font-size: 18px; color: var(--ink-2); max-width: 66ch; }
+
+  /* ---------- cover ---------- */
+  .cover { padding: 56px 0 40px; border-bottom: 1px solid var(--line); margin-bottom: 44px; }
+  .cover .brand { display: flex; align-items: center; gap: 12px; margin-bottom: 26px; color: var(--muted); font-size: 14px; }
+  .cover .mark { width: 34px; height: 34px; border-radius: 9px; background: linear-gradient(135deg, var(--accent), var(--accent2)); display: grid; place-items: center; }
+  .cover .mark svg { width: 20px; height: 20px; }
+  .cover h1 { margin-bottom: 10px; }
+  .cover .en { font-family: var(--mono); font-size: 14px; color: var(--muted); direction: ltr; display: inline-block; }
+  .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-top: 30px; max-width: 900px; }
+  .fact { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; }
+  .fact b { display: block; font-size: 22px; font-weight: 700; line-height: 1.2; color: var(--ink); }
+  .fact span { font-size: 13px; color: var(--muted); }
+
+  /* ---------- apps strip ---------- */
+  .apps { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin: 20px 0 8px; }
+  .app { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 18px 14px; box-shadow: var(--shadow); }
+  .app .who { font-size: 13px; color: var(--muted); }
+  .app h3 { margin-top: 2px; }
+  .app ul { font-size: 15px; margin-top: 8px; }
+
+  /* ---------- tables ---------- */
+  .tbl { width: 100%; border-collapse: collapse; font-size: 15px; margin: 10px 0 18px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+  .tbl th, .tbl td { padding: 9px 12px; border-bottom: 1px solid var(--line); text-align: start; vertical-align: top; }
+  .tbl th { background: var(--surface-2); font-weight: 600; font-size: 13.5px; color: var(--ink-2); }
+  .tbl tr:last-child td { border-bottom: 0; }
+  .tbl td.k { white-space: nowrap; color: var(--ink-2); font-weight: 500; }
+  .scroll { overflow-x: auto; }
+
+  /* ---------- callouts ---------- */
+  .callout { border: 1px solid var(--line); border-inline-start: 4px solid var(--accent); background: var(--surface); border-radius: 8px; padding: 12px 16px; margin: 14px 0 18px; max-width: 78ch; }
+  .callout .t { font-weight: 600; font-size: 14px; margin-bottom: 4px; color: var(--accent-ink); }
+  .callout p:last-child, .callout ul:last-child { margin-bottom: 0; }
+  .callout.rule { border-inline-start-color: var(--accent2); } .callout.rule .t { color: var(--accent2); }
+  .callout.case { border-inline-start-color: var(--warn); } .callout.case .t { color: var(--warn); }
+  .callout.guard { border-inline-start-color: var(--good); } .callout.guard .t { color: var(--good); }
+  .callout.gap { border-inline-start-color: var(--bad); } .callout.gap .t { color: var(--bad); }
+
+  /* ---------- chips ---------- */
+  .chip { display: inline-block; font-size: 12.5px; font-weight: 500; padding: 2px 9px; border-radius: 999px; background: var(--surface-2); color: var(--ink-2); border: 1px solid var(--line); }
+  .chip.good { background: var(--good-soft); color: var(--good); border-color: transparent; }
+  .chip.warn { background: var(--warn-soft); color: var(--warn); border-color: transparent; }
+  .chip.bad { background: var(--bad-soft); color: var(--bad); border-color: transparent; }
+  .chip.acc { background: var(--accent-soft); color: var(--accent-ink); border-color: transparent; }
+
+  /* ---------- screen sheets ---------- */
+  .screen { margin: 34px 0 44px; }
+  .screen-head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
+  .screen-head .route { font-family: var(--mono); font-size: 12.5px; color: var(--muted); direction: ltr; }
+  .shots { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 12px 0 14px; }
+  .shots.phone { grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); max-width: 900px; }
+  .shots figure { margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+  .shots img { display: block; width: 100%; height: auto; background: #111; }
+  .shots.phone img { background: transparent; }
+  .shots figcaption { font-size: 12.5px; color: var(--muted); padding: 7px 12px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; gap: 8px; }
+  .shots figcaption .theme { font-family: var(--mono); font-size: 11.5px; direction: ltr; }
+  @media (max-width: 760px) { .shots { grid-template-columns: 1fr; } }
+  .two { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 22px; align-items: start; }
+  .two > * { min-width: 0; }
+  .aside-img { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; text-align: center; }
+  .aside-img img { max-width: 260px; width: 100%; border-radius: 6px; }
+  .aside-img figcaption { font-size: 12.5px; color: var(--muted); margin-top: 8px; }
+
+  /* ---------- steps ---------- */
+  .steps { counter-reset: s; list-style: none; padding: 0; max-width: 78ch; }
+  .steps li { counter-increment: s; position: relative; padding-inline-start: 40px; margin-bottom: 10px; }
+  .steps li::before { content: counter(s); position: absolute; inset-inline-start: 0; top: 2px; width: 26px; height: 26px; border-radius: 50%; background: var(--accent-soft); color: var(--accent-ink); font-weight: 600; font-size: 13px; display: grid; place-items: center; font-variant-numeric: tabular-nums; }
+  .steps li b { font-weight: 600; }
+
+  /* ---------- misc ---------- */
+  .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; }
+  .card h4 { margin-top: 0; }
+  .card p, .card ul { font-size: 15px; }
+  .kv { display: grid; grid-template-columns: max-content 1fr; gap: 6px 16px; font-size: 15px; margin: 8px 0 14px; }
+  .kv dt { color: var(--muted); } .kv dd { margin: 0; }
+  hr.soft { border: 0; border-top: 1px solid var(--line); margin: 28px 0; }
+  .footer { color: var(--muted); font-size: 13px; border-top: 1px solid var(--line); padding-top: 18px; margin-top: 40px; }
+  @media print {
+    @page { size: A4; margin: 14mm 12mm; }
+    :root {
+      --bg: #FFFFFF; --surface: #FFFFFF; --surface-2: #EEF2F2; --ink: #142020; --ink-2: #3E5250; --muted: #66787A;
+      --line: #D7E0DF; --accent: #0B8C7A; --accent-ink: #086657; --accent-soft: #DCF2EE; --accent2: #5A49D8; --accent2-soft: #E6E2FA;
+      --good: #1F8A55; --good-soft: #DDF3E6; --warn: #A8690E; --warn-soft: #FBEBD0; --bad: #C13B33; --bad-soft: #FADDDB; --shadow: none;
+    }
+    body { font-size: 11pt; line-height: 1.6; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .page { max-width: none; padding: 0; }
+    .toc { display: none; }
+    .layout { display: block; }
+    .cover { padding-top: 20mm; }
+    section { margin-bottom: 26px; }
+    section > h2 { break-after: avoid; }
+    #apps, #admin, #member, #o-screens, #o-features { break-before: page; }
+    .screen, .card, .callout, .shots figure, .tbl tr, .steps li, .app { break-inside: avoid; }
+    h3, h4 { break-after: avoid; }
+    .shots { gap: 8px; }
+    .shots img { max-height: 118mm; object-fit: contain; }
+    .shots.phone img { max-height: 95mm; }
+    a { color: inherit; }
+    .footer { margin-top: 20px; }
+  }
+  @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+  .shots.gallery { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+  @media print { .shots.gallery { grid-template-columns: 1fr 1fr; } .shots.gallery img { max-height: 70mm; } }
+</style>
+
+<div class="page">
+
+<header class="cover">
+  <div class="brand">
+    <div class="mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#0E1415" stroke-width="2.2" stroke-linecap="round"><path d="M4 9v6M20 9v6M7 7v10M17 7v10M7 12h10"/></svg></div>
+    <span>نظرة عامة · النسخة 1.0 · أيلول 2026</span>
+  </div>
+  <h1>نظام إدارة النوادي الرياضية</h1>
+  <div class="en">Gym Management System — GMS</div>
+  <p class="lead" style="margin-top:14px">ثلاثة تطبيقات على قاعدة بيانات واحدة: تطبيق إدارة على الحاسوب لموظفي الاستقبال والمالك، وتطبيق للأعضاء على الهاتف، وتطبيق للمدربين.</p>
+  <div class="facts">
+    <div class="fact"><b>3</b><span>تطبيقات: إدارة · عضو · مدرب</span></div>
+    <div class="fact"><b>1</b><span>قاعدة بيانات واحدة مخصّصة للنادي</span></div>
+    <div class="fact"><b>2</b><span>عملتان بالتوازي: دولار وليرة سورية</span></div>
+    <div class="fact"><b>AR / EN</b><span>عربي وإنجليزي في كل شاشة</span></div>
+    <div class="fact"><b>☾ / ☀</b><span>وضع داكن وفاتح في التطبيقات الثلاثة</span></div>
+    <div class="fact"><b>15</b><span>شاشة إدارة · 5 تبويبات للعضو</span></div>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc" aria-label="المحتويات">
+  <div class="eyebrow">المحتويات</div>
+  <a href="#overview">1 · ما هو النظام</a>
+  <a href="#apps">2 · المكوّنات الثلاثة</a>
+  <a href="#o-screens">3 · لمحة عن الشاشات</a>
+  <a href="#o-features">4 · ماذا يحصل عليه النادي</a>
+  <a href="#requirements">5 · المتطلبات</a>
+</nav>
+
+<main>
+<section id="overview">
+  <div class="eyebrow">1</div>
+  <h2>ما هو النظام</h2>
+  <p class="lead">نظام متكامل لتشغيل نادٍ رياضي: الأعضاء والاشتراكات والحضور والخزائن والمصاريف والتقارير، مع تطبيق يضعه النادي بيد كل عضو، وتطبيق يبني به المدربون مكتبة التمارين.</p>
+  <p>بُني النظام أولاً لنادٍ عامل، وطُوّر معه شهراً بعد شهر حتى غطّى تفاصيل التشغيل اليومي التي تغيب عادةً عن الأنظمة الجاهزة: يوم عمل لا ينتهي عند منتصف الليل، عملتان لا تُجمعان في رقم واحد، أعضاء يدخلون برقم عضوية لا ببريد إلكتروني، وحد أسبوعي لزيارات الباقات الطلابية.</p>
+  <h3>ما الذي يميّزه</h3>
+  <div class="grid2">
+    <div class="card"><h4>يوم عمل قابل للضبط</h4><p>يبدأ يوم التقارير بالساعة التي يحدّدها النادي (مثلاً 06:00 أو 13:00) لا عند منتصف الليل. كل مبيعة أو حضور تُحسب على «يوم النادي» الصحيح، ولو سُجّلت في الثانية فجراً.</p></div>
+    <div class="card"><h4>دولار وليرة دون سعر صرف</h4><p>كل باقة ومصروف وتقرير يحمل عملته. المجاميع تُعرض عمودين متجاورين، ولا يوجد في النظام أي تحويل يفسد الأرقام بعد أسبوع.</p></div>
+    <div class="card"><h4>عربي حقيقي</h4><p>واجهة عربية من اليمين لليسار في التطبيقات الثلاثة، مع تصدير PDF بخط عربي مضمّن وحروف متصلة، والتبديل إلى الإنجليزية بضغطة.</p></div>
+    <div class="card"><h4>دخول بالبصمة</h4><p>قارئ بصمة USB على مكتب الاستقبال: العضو يضع إصبعه فيُسجَّل حضوره فوراً، والموظف يفتح تطبيق الإدارة ببصمته دون كلمة مرور.</p></div>
+    <div class="card"><h4>ثلاثة تطبيقات على قاعدة واحدة</h4><p>ما يبيعه الاستقبال يراه العضو في هاتفه في اللحظة نفسها. ما يضيفه المدرب من تمارين يظهر للأعضاء فوراً. لا مزامنة يدوية ولا ملفات تُنقل.</p></div>
+    <div class="card"><h4>سجل مالي لا يُمحى</h4><p>الاشتراكات والخزائن لا تُحذف نهائياً أبداً، بل تُخفى. حذف اشتراك بالخطأ لا يغيّر أرقام يوم مضى، والاسترجاعات المالية تبقى موثّقة باسم العضو ورقم الخزانة.</p></div>
+  </div>
+</section>
+
+<section id="apps">
+  <div class="eyebrow">2</div>
+  <h2>المكوّنات الثلاثة</h2>
+  <div class="apps">
+    <div class="app">
+      <div class="who">لموظفي الاستقبال والمالك · Windows</div>
+      <h3>تطبيق الإدارة</h3>
+      <ul>
+        <li>لوحة تحكم بأرقام اليوم لحظياً</li>
+        <li>أعضاء، اشتراكات، باقات، حضور، خزائن، مصاريف</li>
+        <li>تقارير يومية وشهرية وسنوية مع تصدير Excel وPDF</li>
+        <li>بصمة، إعلانات، صندوق ملاحظات، استرجاع المنقطعين</li>
+        <li>مراجعة تمارين الأعضاء قبل نشرها</li>
+      </ul>
+    </div>
+    <div class="app">
+      <div class="who">للأعضاء · Android و iOS</div>
+      <h3>تطبيق العضو</h3>
+      <ul>
+        <li>الاشتراك الحالي وتاريخ انتهائه وعدد الزيارات</li>
+        <li>مكتبة التمارين بالفيديو مرتّبة حسب البرنامج والعضلة</li>
+        <li>تمارين خاصة بمؤقّت راحة ومؤشر تقدّم، تعمل دون إنترنت</li>
+        <li>مجتمع التمارين: مشاركة وتعليق وإعجاب</li>
+        <li>القياسات الجسمية، إعلانات النادي، إرسال ملاحظة أو تقييم مدرب</li>
+      </ul>
+    </div>
+    <div class="app">
+      <div class="who">للمدربين · Android و Windows</div>
+      <h3>تطبيق المدرب</h3>
+      <ul>
+        <li>بناء البرامج التدريبية: برنامج ← عضلة ← تمرين</li>
+        <li>تمرين بمجموعات وتكرارات نصية (مثل 12 10 8) وفيديو وصورة</li>
+        <li>إدارة أنواع العضلات، صور افتراضية جاهزة أو رفع صورة</li>
+        <li>كل ما يُحفظ يظهر للأعضاء في هواتفهم فوراً</li>
+      </ul>
+    </div>
+  </div>
+  <p style="margin-top:14px">تعمل التطبيقات الثلاثة على قاعدة بيانات واحدة مستضافة سحابياً ومخصّصة للنادي وحده، فما يُسجَّل في أي تطبيق يظهر في التطبيقين الآخرين في اللحظة نفسها.</p>
+</section>
+
+
+<section id="o-screens">
+  <div class="eyebrow">3</div>
+  <h2>لمحة عن الشاشات</h2>
+  <p class="lead">صور من النسخة الفعلية. كل الشاشات متوفرة بالوضعين الداكن والفاتح وباللغتين العربية والإنجليزية، وألوان الواجهة قابلة للتخصيص بهوية النادي.</p>
+    <div class="shots gallery">
+      <figure><img src="img/admin-dashboard-dark.webp" alt="لوحة التحكم: أرقام اليوم لحظياً بعملتين"><figcaption><span>لوحة التحكم: أرقام اليوم لحظياً بعملتين</span></figcaption></figure>
+      <figure><img src="img/admin-members-light.webp" alt="الأعضاء: بحث فوري وحالة كل عضو"><figcaption><span>الأعضاء: بحث فوري وحالة كل عضو</span></figcaption></figure>
+      <figure><img src="img/admin-checkins-light.webp" alt="الحضور: تسجيل دخول بالرقم أو الاسم أو البصمة"><figcaption><span>الحضور: تسجيل دخول بالرقم أو الاسم أو البصمة</span></figcaption></figure>
+      <figure><img src="img/admin-lockers-dark.webp" alt="الخزائن: شبكة تُظهر المتاح والمحجوز"><figcaption><span>الخزائن: شبكة تُظهر المتاح والمحجوز</span></figcaption></figure>
+      <figure><img src="img/admin-reports-monthly-dark.webp" alt="التقارير: يومي وشهري وسنوي مع تصدير Excel وPDF"><figcaption><span>التقارير: يومي وشهري وسنوي مع تصدير Excel وPDF</span></figcaption></figure>
+      <figure><img src="img/admin-winback-light.webp" alt="استرجاع المنقطعين: واتساب واتصال بضغطة"><figcaption><span>استرجاع المنقطعين: واتساب واتصال بضغطة</span></figcaption></figure>
+    </div>
+
+    <div class="shots phone">
+      <figure><img src="img/member-home-dark.webp" alt="العضو: مكتبة التمارين بالفيديو"><figcaption><span>العضو: مكتبة التمارين بالفيديو</span></figcaption></figure>
+      <figure><img src="img/member-profile-light.webp" alt="العضو: بطاقة العضوية والزيارات والقياسات"><figcaption><span>العضو: بطاقة العضوية والزيارات والقياسات</span></figcaption></figure>
+      <figure><img src="img/member-player-light.webp" alt="العضو: مشغّل تمرين بمؤقّت راحة"><figcaption><span>العضو: مشغّل تمرين بمؤقّت راحة</span></figcaption></figure>
+      <figure><img src="img/coach-exercises-dark.webp" alt="المدرب: مكتبة التمارين"><figcaption><span>المدرب: مكتبة التمارين</span></figcaption></figure>
+    </div>
+
+</section>
+
+<section id="o-features">
+  <div class="eyebrow">4</div>
+  <h2>ماذا يحصل عليه النادي</h2>
+  <div class="grid2">
+    <div class="card"><h4>إدارة الأعضاء والاشتراكات</h4><p>تسجيل الأعضاء، بيع الباقات بأي مدة وسعر وعملة، التجديد، وتنبيه عند تداخل الاشتراكات. باقات بحد زيارات أسبوعي أو بخزانة مضمّنة.</p></div>
+    <div class="card"><h4>الحضور والزوار</h4><p>تسجيل الدخول برقم العضو أو اسمه أو بالبصمة، تحقق تلقائي من الاشتراك، بيع دخول يومي للزوار، وخروج تلقائي بعد مدة يحدّدها النادي.</p></div>
+    <div class="card"><h4>الخزائن والمصاريف</h4><p>شبكة خزائن بحالة كل واحدة وحجز بفترة زمنية، ومصاريف بفئات يحدّدها النادي تُخصم من صافي اليوم.</p></div>
+    <div class="card"><h4>التقارير</h4><p>تقارير يومية وشهرية وسنوية، أداء الباقات، الأعضاء الجدد والمنتهون ومن لم يجدّد، بعملتين منفصلتين، وتصدير إلى Excel وPDF بخط عربي.</p></div>
+    <div class="card"><h4>التواصل مع الأعضاء</h4><p>إعلانات تصل هواتف الأعضاء فوراً، صندوق ملاحظات وتقييم للمدربين، وقائمة المنقطعين مع رسالة واتساب جاهزة.</p></div>
+    <div class="card"><h4>تطبيق للعضو وتطبيق للمدرب</h4><p>العضو يرى اشتراكه وزياراته وقياساته ويتدرّب ببرامج النادي أو ببرامجه الخاصة دون إنترنت. المدرب يبني مكتبة التمارين من هاتفه.</p></div>
+    <div class="card"><h4>أمان مبني في الأساس</h4><p>كلمات مرور مشفّرة لا تُقرأ، حماية من تخمين الدخول، بصمات لا تغادر مكتب الاستقبال، وسجل مالي لا يُمحى بحذف لاحق.</p></div>
+    <div class="card"><h4>بهوية النادي</h4><p>اسم النادي وشعاره وألوانه في تطبيق الأعضاء، وروابط تحميل التطبيقات كرموز QR يمسحها العضو من الاستقبال.</p></div>
+  </div>
+</section>
+
+<section id="requirements">
+  <div class="eyebrow">5</div>
+  <h2>المتطلبات</h2>
+  <div class="grid2">
+    <div class="card"><h4>مكتب الاستقبال</h4><ul><li>حاسوب Windows 10 أو 11 (يُثبَّت التطبيق بملف تنصيب عادي)</li><li>اتصال إنترنت</li><li>اختياري: قارئ بصمة ZKTeco ZK4500 عبر USB مع برنامج تشغيله</li></ul></div>
+    <div class="card"><h4>الأعضاء والمدربون</h4><ul><li>هاتف Android (يُحمَّل التطبيق من رمز QR في الاستقبال) أو iOS</li><li>تطبيق المدرب يعمل أيضاً على Windows</li></ul></div>
+    <div class="card"><h4>الاستضافة</h4><ul><li>قاعدة بيانات سحابية مخصّصة للنادي يوفّرها المزوّد</li><li>لا يحتاج النادي إلى خادم خاص أو تجهيزات إضافية</li></ul></div>
+  </div>
+</section>
+
+<div class="footer">أُعدّت هذه النظرة العامة من النسخة الفعلية للنظام، الإصدار 1.0، أيلول 2026. الأسماء والأرقام الظاهرة في الصور بيانات تجريبية.</div>
+
+</main>
+</div>
+</div>
